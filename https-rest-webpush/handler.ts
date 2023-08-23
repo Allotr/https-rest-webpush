@@ -4,7 +4,7 @@ import * as core from 'express-serve-static-core';
 
 import { getLoadedEnvVariables } from "./src/utils/env-loader";
 import { initializeWebPush } from "./src/notifications/web-push";
-import { initializeGooglePassport } from "src/auth/google-passport";
+import { initializeGooglePassport } from "./src/auth/google-passport";
 
 async function handle(event: any, context: any, cb: any) {
   // When using graphqlHTTP this is not being executed
