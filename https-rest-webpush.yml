@@ -1,0 +1,9 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: https://openfaas.allotr.eu
+functions:
+  https-rest-webpush:
+    lang: node-typescript-express
+    handler: ./https-rest-webpush
+    image: rafaelpernil/https-rest-webpush:latest
