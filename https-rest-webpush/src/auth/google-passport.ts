@@ -1,17 +1,13 @@
 import express from "express";
 import { getLoadedEnvVariables } from "../utils/env-loader";
-import { UserDbObject, UserWhitelistDbObject, GlobalRole } from "allotr-graphql-schema-types";
+import { UserDbObject } from "allotr-graphql-schema-types";
 import { ObjectId } from "mongodb"
 
 import passport from "passport";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import session from "express-session";
 import MongoStore from 'connect-mongo';
-import { USERS, USER_WHITELIST } from "../consts/collections";
+import { USERS } from "../consts/collections";
 import { getMongoDBConnection } from "../utils/mongodb-connector";
-import { getBooleanByString } from "../utils/data-util";
-
-const cors = require('cors');
 
 function isLoggedIn(req: express.Request, res: express.Response, next: express.NextFunction) {
     if (req.user) {
@@ -25,24 +21,9 @@ function isLoggedIn(req: express.Request, res: express.Response, next: express.N
 
 function initializeGooglePassport(app: express.Express) {
     const {
-        GOOGLE_CLIENT_ID,
-        GOOGLE_CLIENT_SECRET,
-        GOOGLE_CALLBACK_URL,
         MONGO_DB_ENDPOINT,
-        SESSION_SECRET,
-        WHITELIST_MODE
+        SESSION_SECRET
     } = getLoadedEnvVariables();
-    const corsOptions = {
-        origin: (origin, next) => {
-            // Test for main domain and all subdomains
-            if (origin == null || origin === 'https://allotr.eu' || /^https:\/\/\w+?\.allotr\.eu$/gm.test(origin)) {
-                next(null, true)
-            } else {
-                next(new Error('Not allowed by CORS'))
-            }
-        },
-        credentials: true // <-- REQUIRED backend setting
-    };
 
     const sessionMiddleware = session({
         secret: SESSION_SECRET,
@@ -55,7 +36,6 @@ function initializeGooglePassport(app: express.Express) {
     const passportMiddleware = passport.initialize();
     const passportSessionMiddleware = passport.session();
 
-    app.use(cors(corsOptions));
 
     app.use(sessionMiddleware)
     app.use(passportMiddleware)
