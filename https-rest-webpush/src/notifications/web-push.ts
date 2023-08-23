@@ -72,19 +72,5 @@ function initializeWebPush(app: express.Express) {
 
 }
 
-// Send notification to the push service. Remove the subscription from the
-// `subscriptions` array if the  push service responds with an error.
-// Subscription has been cancelled or expired.
-async function sendNotification(subscription: webPush.PushSubscription, payload?: string | Buffer | null | undefined) {
-    try {
-        await webPush.sendNotification(subscription, payload)
-        // console.log('Push Application Server - Notification sent to ' + subscription.endpoint);
 
-    } catch (e) {
-        // console.log("Error pushing mesage to user", e);
-    }
-}
-
-
-
-export { initializeWebPush, sendNotification }
+export { initializeWebPush }
