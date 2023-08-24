@@ -26,12 +26,12 @@ function initializeWebPush(app: express.Express) {
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 
-    app.get('/webpush/vapidPublicKey', isLoggedIn, connectionMiddleware, (req, res) => {
+    app.get('/vapidPublicKey', isLoggedIn, connectionMiddleware, (req, res) => {
         res.send(VAPID_PUBLIC_KEY);
     });
 
     // Register a subscription by adding it to the `subscriptions` array.
-    app.post('/webpush/register', isLoggedIn, connectionMiddleware, async (req, res) => {
+    app.post('/register', isLoggedIn, connectionMiddleware, async (req, res) => {
         const subscription = req?.body?.subscription as WebPushSubscription;
         const { _id } = req.user as UserDbObject;
 
@@ -51,7 +51,7 @@ function initializeWebPush(app: express.Express) {
     });
 
     // Unregister a subscription by removing it from the `subscriptions` array
-    app.post('/webpush/unregister', isLoggedIn, connectionMiddleware, async (req, res) => {
+    app.post('/unregister', isLoggedIn, connectionMiddleware, async (req, res) => {
         const subscription = req?.body?.subscription as WebPushSubscription;
         const { _id } = req.user as UserDbObject;
         const db = await (await req.mongoDBConnection).db;
